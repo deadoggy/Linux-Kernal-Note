@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.cnblogs.com/fah936861121/articles/8043187.html -->
+<html lang="zh-cn" class="gr__cnblogs_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="never">
+    <title>转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园</title>
+<meta property="og:description" content="进程与线程的区别，早已经成为了经典问题。自线程概念诞生起，关于这个问题的讨论就没有停止过。无论是初级程序员，还是资深专家，都应该考虑过这个问题，只是层次角度不同罢了。一般程序员而言，搞清楚二者的概念，">
+    <link type="text/css" rel="stylesheet" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/bundle-SimpleBlue.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/bundle-SimpleBlue-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/fah936861121/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/fah936861121/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/fah936861121/wlwmanifest.xml">
+    <script src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/amp4ads-host-v0.js"></script><script src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/pubads_impl_rendering_2019041801.js"></script><script async="" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/analytics.js"></script><script src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script>var currentBlogId=312958;var currentBlogApp='fah936861121',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/blog-common.js" type="text/javascript"></script>
+<link rel="preload" href="https://adservice.google.com/adsid/integrator.js?domain=www.cnblogs.com" as="script"><script type="text/javascript" src="https://adservice.google.com/adsid/integrator.js?domain=www.cnblogs.com"></script><script src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/pubads_impl_2019041801.js" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-32/html/container.html?v=1-0-33"></head>
+<body data-gr-c-s-loaded="true">
+<a name="top"></a>
+
+
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+		
+<!--done-->
+<div class="title"><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/fah936861121/">大海中的一粒沙</a></div>
+<div class="subtitle">生命不息，奋斗不止</div>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li id="nav_myhome"><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/fah936861121/">首页</a></li>
+<li id="nav_newpost"><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li id="nav_contact"><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E5%A4%A7%E6%B5%B7%E4%B8%AD%E7%9A%84%E4%B8%80%E7%B2%92%E6%B2%99">联系</a></li>
+<li id="nav_rss"><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/fah936861121/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/fah936861121/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li id="nav_admin"><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+随笔-34&nbsp;
+文章-165&nbsp;
+评论-1&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/fah936861121/articles/8043187.html">转载_Linux进程与线程的区别</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><div id="article_content" class="article_content csdn-tracking-statistics" style="overflow: hidden;" data-mod="popu_519" data-dsm="post">
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;"><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程与线程的区别，早已经成为了经典问题。自线程概念诞生起，关于这个问题的讨论就没有停止过。无论是初级程序员，还是资深专家，都应该考虑过这个问题，只是层次角度不同罢了。一般程序员而言，搞清楚二者的概念，在工作实际中去运用成为了焦点。而资深工程师则在考虑系统层面如何实现两种技术及其各自的性能和实现代价。以至于到今天，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">内核还在持续更新完善</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">关于进程和线程的实现模块也是内核完善的任务之一</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;"><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">本文将以一个从事</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">平台系统开发的程序员角度描述这个经典问题。本文素材全部来源于工作实践经验与知识规整，若有疏漏或不正之处，敬请读者慷慨指出。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;"> <span style="padding: 0px; margin: 0px;"><a style="padding: 0px; margin: 0px; color: #0072bb; outline: 0px;" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/131324_guJH_1863332.jpg" target="_blank"><img style="padding: 0px; margin: 10px 0px; border: 1px solid #dddddd; max-width: 640px; height: auto; background: #f4f7f9;" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/131324_guJH_1863332.jpg" alt=""></a><br style="padding: 0px; margin: 0px;">
+</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">0.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">首先，简要了解一下进程和线程。对于操作系统而言，进程是核心之核心，整个现代操作系统的根本，就是以进程为单位在执行任务。系统的管理架构也是基于进程层面的。在按下电源键之后，计算机就开始了复杂的启动过程，此处有一个经典问题：当按下电源键之后，计算机如何把自己由静止启动起来的？本文不讨论系统启动过程，请读者自行科普。操作系统启动的过程简直可以描述为上帝创造万物的过程，期初没有世界，但是有上帝，是上帝创造了世界，之后创造了万物，然后再创造了人，然后塑造了人的七情六欲，再然后人类社会开始遵循自然规律繁衍生息。。。操作系统启动进程的阶段就相当于上帝造人的阶段。本文讨论的全部内容都是“上帝造人”之后的事情。第一个被创造出来的进程是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">0</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程，这个进程在操作系统层面是不可见的，但它存在着。</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">0</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程完成了操作系统的功能加载与初期设定，然后它创造了</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(init)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，这个</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程就是操作系统的“耶稣”。</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程是上帝派来管理整个操作系统的，所以在用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pstree</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">查看进程树可知，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程位于树根。再之后，系统的很多管理程序都以进程身份被</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">号进程创造出来，还创造了与人类沟通的桥梁——</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">shell</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。从那之后，人类可以跟操作系统进行交流，可以编写程序，可以执行任务。。。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">而这一切，都是基于进程的。每一个任务</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">被创建时，系统会为他分配存储空间等必要资源，然后在内核管理区为该进程创建管理节点，以便后来控制和调度该任务的执行。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程真正进入执行阶段，还需要获得</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">CPU</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的使用权，这一切都是操作系统掌管着，也就是所谓的调度，在各种条件满足</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">资源与</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">CPU</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">使用权均获得</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的情况下，启动进程的执行过程。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">除</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">CPU</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">而外，一个很重要的资源就是存储器了，系统会为每个进程分配独有的存储空间，当然包括它特别需要的别的资源，比如写入时外部设备是可使用状态等等。有了上面的引入，我们可以对进程做一个简要的总结：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; color: #0070c0; font-size: 18px;">进程，是</span><span style="padding: 0px; margin: 0px; font-family: SimSun; color: #0070c0; font-size: 18px;">计算机中的程序关于某数据集合上的一次运行活动，是系统进行资源分配和调度的基本单位，是操作系统结构的基础。它的执行需要系统分配资源创建实体之后，才能进行。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">随着技术发展，在执行一些细小任务时，本身无需分配单独资源时</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">多个任务共享同一组资源即可，比如所有子进程共享父进程的资源</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，进程的实现机制依然会繁琐的将资源分割，这样造成浪费，而且还消耗时间。后来就有了专门的多任务技术被创造出来——线程。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程的特点就是在不需要独立资源的情况下就可以运行。如此一来会极大节省资源开销，以及处理时间。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">好了，前面的一段文字是简要引入两个名词，即进程和线程。本文讨论目标是解释清楚进程和线程的区别，关于二者的技术实现，请读者查阅相关资料。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">下面我们开始重点讨论本文核心了。从下面几个方面阐述进程和线程的区别。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">1).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">二者的相同点</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">2).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">实现方式的差异</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">3).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">多任务程序设计模式的区别</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">4).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">实体间</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">进程间，线程间，进线程间</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">通信方式的不同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">5).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">控制方式的异同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">6).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">资源管理方式的异同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">7).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">个体间辈分关系的迥异</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">8).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">进程池与线程池的技术实现差别</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">接下来我们就逐个进行解释。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">1).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">二者的相同点</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">无论是进程还是线程，对于程序员而言，都是用来实现多任务并发的技术手段。二者都可以独立调度，因此在多任务环境下，功能上并无差异。并且二者都具有各自的实体，是系统独立管理的对象个体。所以在系统层面，都可以通过技术手段实现二者的控制。而且二者所具有的状态都非常相似。而且，在多任务程序中，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">子进程</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">子线程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">的调度一般与父进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">父线程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">平等竞争</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">其实在</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">内核</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">2.4</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">版以前，线程的实现和管理方式就是完全按照进程方式实现的。在</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">2.6</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">版内核以后才有了单独的线程实现。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px;"><span style="padding: 0px; margin: 0px; font-size: 24px;"><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">&nbsp;</span><a style="padding: 0px; margin: 0px; color: #0072bb; outline: 0px; font-size: 16px;" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/132501_6PVU_1863332.jpg" target="_blank"><img style="padding: 0px; margin: 10px 0px; border: 1px solid #dddddd; max-width: 640px; height: auto; background: #f4f7f9;" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/132501_6PVU_1863332.jpg" alt="" width="325" height="249"></a><a style="padding: 0px; margin: 0px; color: #0072bb; outline: 0px; font-size: 16px;" href="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/133750_ldwM_1863332.jpg" target="_blank"><img style="padding: 0px; margin: 10px 0px; border: 1px solid #dddddd; max-width: 640px; height: auto; background: #f4f7f9;" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/133750_ldwM_1863332.jpg" alt="" width="341" height="248"></a></span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">2).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实现方式的差异</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">进程是资源分配的基本单位，线程是调度的基本单位。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">这句经典名言已流传数十年，各种操作系统教材都可见此描述。确实如此，这就是二者的显著区别。读者请注意“基本”二字。相信有读者看到前半句的时候就在心里思考，“进程岂不是不能调度？”，非也！进程和线程都可以被调度，否则多进程程序该如何运行呢！</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">只是，线程是更小的可以调度的单位，也就是说，只要达到线程的水平就可以被调度了，进程自然可以被调度。它强调的是分配资源时的对象必须是进程，不会给一个线程单独分配系统管理的资源。若要运行一个任务，想要获得资源，最起码得有进程，其他子任务可以以线程身份运行，资源共享就行了。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">简而言之，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">进程的个体间是完全独立的，而线程间是彼此依存的。多进程环境中，任何一个进程的终止，不会影响到其他进程。而多线程环境中，父线程终止，全部子线程被迫终止</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">没有了资源</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">。而任何一个子线程终止一般不会影响其他线程，除非子线程执行了</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">exit()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">系统调用。任何一个子线程执行</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">exit()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">，全部线程同时灭亡。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">其实，也没有人写出只有线程而没有进程的程序。多线程程序中至少有一个主线程，而这个主线程其实就是有</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">main</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">函数的进程。它是整个程序的进程，所有线程都是它的子线程。我们通常把具有多线程的主进程称之为主线程。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">从系统实现角度讲，进程的实现是调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">系统调用：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">pid_t fork(void);</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程的实现是调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">系统调用：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">int clone(int (*fn)(void *), void *child_stack, int flags, void *arg, ...</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">/* pid_t *ptid, struct user_desc *tls, pid_t *ctid */</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">);</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">其中，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是将父进程的全部资源复制给了子进程。而线程的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">只是复制了一小部分必要的资源。在调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">时可以通过参数控制要复制的对象。可以说，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实现的是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的加强完整版。当然，后来操作系统还进一步优化</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实现——写时复制技术。在子进程需要复制资源</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">比如子进程执行写入动作更改父进程内存空间</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">时才复制，否则创建子进程时先不复制。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实际中，编写多进程程序时采用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">创建子进程实体。而创建线程时并不采用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">系统调用，而是采用线程库函数。常用线程库有</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux-Native</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程库和</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">POSIX</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程库。其中应用最为广泛的是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">POSIX</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程库。因此读者在多线程程序中看到的是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pthread_create</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">而非</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">我们知道，库是建立在操作系统层面上的功能集合，因而它的功能都是操作系统提供的。由此可知，线程库的内部很可能实现了</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">clone</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的调用。不管是进程还是线程的实体，都是操作系统上运行的实体。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">最后，我们说一下</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">vfork()&nbsp;</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。这也是一个系统调用，用来创建一个新的进程。它创建的进程并不复制父进程的资源空间，而是共享，也就说实际上</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">vfork</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实现的是一个接近线程的实体，只是以进程方式来管理它。并且，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">vfork()</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">的子进程与父进程的运行时间是确定的：子进程“</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">结束</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">”后父进程才运行。请读者注意“结束”二字。并非子进程完成退出之意，而是子进程返回时。一般采用</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">vfork()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的子进程，都会紧接着执行</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">execv</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">启动一个全新的进程，该进程的进程空间与父进程完全独立不相干，所以不需要复制父进程资源空间。此时，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">execv</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">返回时父进程就认为子进程“结束”了，自己开始运行。实际上子进程继续在一个完全独立的空间运行着。</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">举个例子，比如在一个聊天程序中，弹出了一个视频播放器。你说视频播放器要继承你的聊天程序的进程空间的资源干嘛？莫非视频播放器想要窥探你的聊天隐私不成？</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">懂了吧！</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">3).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">多任务程序设计模式的区别</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">由于进程间是独立的，所以在设计多进程程序时，需要做到资源独立管理时就有了天然优势，而线程就显得麻烦多了。比如多任务的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">TCP</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">程序的服务端，父进程执行</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">accept()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">一个客户端连接请求之后会返回一个新建立的连接的描述符</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">DES</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，此时如果</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">fork()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">一个子进程，将</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">DES</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">带入到子进程空间去处理该连接的请求，父进程继续</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">accept</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">等待别的客户端连接请求，这样设计非常简练，而且父进程可以用同一变量</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(val)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">保存</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">accept()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的返回值，因为子进程会复制</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">val</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">到自己空间，父进程再覆盖此前的值不影响子进程工作。但是如果换成多线程，父线程就不能复用一个变量</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">val</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">多次执行</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">accept()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">了。因为子线程没有复制</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">val</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的存储空间，而是使用父线程的，如果子线程在读取</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">val</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">时父线程接受了另一个客户端请求覆盖了该值，则子线程无法继续处理上一次的连接任务了。改进的办法是子线程立马复制</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">val</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的值在自己的栈区，但父线程必须保证子线程复制动作完成之后再执行新的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">accept()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。但这执行起来并不简单，因为子线程与父线程的调度是独立的，父线程无法知道子线程何时复制完毕。这又得发生线程间通信，子线程复制完成后主动通知父线程。这样一来父线程的处理动作必然不能连贯，比起多进程环境，父线程显得效率有所下降。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">PS</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">：</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">这里引述一个知名的面试问题：多进程的</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">TCP</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">服务端，能否互换</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">fork()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">与</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">accept()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">的位置？请读者自行思考</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">关于资源不独立，看似是个缺点，但在有的情况下就成了优点。多进程环境间完全独立，要实现通信的话就得采用进程间的通信方式，它们通常都是耗时间的。而线程则不用任何手段数据就是共享的。当然多个子线程在同时执行写入操作时需要实现互斥，否则数据就写“脏”了。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">4).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实体间</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程间，线程间，进线程间</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">通信方式的不同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">进程间的通信方式有这样几种：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">A.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">共享内存</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">消息队列</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">信号量</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">D.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">有名管道</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">E.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">无名管道</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">F.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">信号</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">G.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">文件</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">H.socket</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">线程间的通信方式上述进程间的方式都可沿用，且还有自己独特的几种：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">A.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">互斥量</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">自旋锁</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">条件变量</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">D.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">读写锁</span><span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">E.</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">线程信号</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">G.</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">全局变量</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">值得注意的是，线程间通信用的信号不能采用进程间的信号，因为信号是基于进程为单位的，而线程是共属于同一进程空间的。故而要采用线程信号。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">综上，进程间通信手段有</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">8</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">种。线程间通信手段有</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">13</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">种。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">而且，进程间采用的通信方式要么需要</span><span style="padding: 0px; margin: 0px; font-weight: 600;"><span style="padding: 0px; margin: 0px; color: red; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">切换内核上下文</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">，要么要与外设访问</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">有名管道，文件</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">。所以速度会比较慢。而线程采用自己特有的通信方式的话，基本都在自己的进程空间内完成，不存在切换，所以通信速度会较快。也就是说，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">进程间与线程间分别采用的通信方式，除了种类的区别外，还有速度上的区别</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">另外，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">进程与线程之间穿插通信的方式，除</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">信号</span><span style="padding: 0px; margin: 0px; color: red; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">以外</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">其他进程间通信方式都可采用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">。</span></span><span style="padding: 0px; margin: 0px;"><br style="padding: 0px; margin: 0px;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程有内核态线程与用户级线程，相关知识请参看我的另一篇博文《</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程的实质》。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">5).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">控制方式的异同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程与线程的身份标示</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">管理方式不一样，进程的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">为</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pid_t</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">类型，实际为一个</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">int</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">型的变量</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">也就是说是有限的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/usr/include/unistd.h:260:typedef __pid_t&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pid_t;</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/usr/include/bits/types.h:126:# define __STD_TYPE&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">typedef</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/usr/include/bits/types.h:142:__STD_TYPE</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">__PID_T_TYPE&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">__pid_t;</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/usr/include/bits/typesizes.h:53:#define __PID_T_TYPE&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">__S32_TYPE</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/usr/include/bits/types.h:100:#define</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">__S32_TYPE&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">int</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">在全系统中，进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是唯一标识，对于进程的管理都是通过</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">PID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">来实现的。每创建一个进程，内核去中就会创建一个结构体来存储该进程的全部信息：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; color: #0070c0; font-size: 18px;">注：下述代码来自</span><span style="padding: 0px; margin: 0px; color: #0070c0; font-size: 18px; font-family: SimSun;">&nbsp;<span style="padding: 0px; margin: 0px;">Linux</span></span><span style="padding: 0px; margin: 0px; font-family: SimSun; color: #0070c0; font-size: 18px;">内核</span><span style="padding: 0px; margin: 0px; color: #0070c0; font-size: 18px; font-family: SimSun;">3.18.1</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">include/linux/sched.h:1235:struct task_struct {</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">volatile long state;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">/*
+ -1 unrunnable, 0 runnable, &gt;0 stopped */</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">void *stack;</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 63pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">...</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">pid_t pid;</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; background: yellow;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pid_t tgid;</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">...</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">};</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">每一个存储进程信息的节点也都保存着自己的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">PID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。需要管理该进程时就通过这个</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">来实现</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">比如发送信号</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。当子进程结束要回收时</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">子进程调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">exit()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">退出或代码执行完</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，需要通过</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">wait()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">系统调用来进行，未回收的消亡进程会成为僵尸进程，其进程实体已经不复存在，但会虚占</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">PID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">资源，因此回收是有必要的。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程的</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是一个</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">long</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">型变量：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">/usr/include/bits/pthreadtypes.h:60:typedef unsigned long int pthread_t;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">它的范围大得多，管理方式也不一样。线程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">一般在本进程空间内作用就可以了，当然系统在管理线程时也需要记录其信息。其方式是，在内核创建一个内核态线程与之对应，也就是说每一个用户创建的线程都有一个内核态线程对应。但这种对应关系不是一对一，而是多对一的关系，也就是一个内核态线程可以对应着多个用户级线程。还是请读者参看《</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">Linux</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程的实质》普及相关概念。此处贴出</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">blog</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">地址：</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px;"><a style="padding: 0px; margin: 0px; color: #0072bb; outline: 0px;" href="http://my.oschina.net/cnyinlinux/blog/367910" rel="nofollow" target="_blank"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">http://my.oschina.net/cnyinlinux/blog/367910</span></a></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">对于线程而言，若要主动终止需要调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pthread_exit()&nbsp;</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，主线程需要调用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pthread_join()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">来回收</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">前提是该线程没有被</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">detached</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，相关概念请查阅线程的“分离属性”</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。像线发送线程信号也是通过线程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">实现的。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">6).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">资源管理方式的异同</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程本身是资源分配的基本单位，因而它的资源都是独立的，如果有多进程间的共享资源，就要用到进程间的通信方式了，比如共享内存。共享数据就放在共享内存去，大家都可以访问，为保证数据写入的安全，加上信号量一同使用。一般而言，共享内存都是和信号量一起使用。消息队列则不同，由于消息的收发是原子操作，因而自动实现了互斥，单独使用就是安全的。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程间要使用共享资源不需要用共享内存，直接使用全局变量即可，或者</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">malloc()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">动态申请内存。显得方便直接。而且互斥使用的是同一进程空间内的互斥量，所以效率上也有优势。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">实际中，为了使程序内资源充分规整，也都采用共享内存来存储核心数据。不管进程还是线程，都采用这种方式。原因之一就是，共享内存是脱离进程的资源，如果</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">进程发生意外终止的话，共享内存可以独立存在不会被回收</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是否回收由用户编程实现</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">)</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">。进程的空间在进程崩溃的那一刻也被系统回收了。虽然有</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">coredump</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">机制，但也只能是有限的弥补。共享内存在进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">down</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">之后还完整保存，这样可以拿来分析程序的故障原因。同时，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll yellow;">运行的宝贵数据没有丢失，程序重启之后还能继续处理之前未完成的任务</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">，这也是采用共享内存的又一大好处。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">总结之，进程间的通信方式都是脱离于进程本身存在的，是全系统都可见的。这样一来，进程的单点故障并不会损毁数据，当然这不一定全是优点。比如，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">进程崩溃前对信号量加锁，崩溃后重启，然后再次进入运行状态，此时直接进行加锁，可能造成死锁，程序再也无法继续运转</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">。再比如，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">共享内存是全系统可见的，如果你的进程资源被他人误读误写，后果肯定也是你不想要的。</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">所以，各有利弊，关键在于程序设计时如何考量，技术上如何规避。这说起来又是编程技巧和经验的事情了。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">7).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">个体间辈分关系的迥异</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程的备份关系森严，在父进程没有结束前，所有的子进程都尊从父子关系，也就是说</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">A</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">创建了</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，则</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">A</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">与</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是父子关系，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">又创建了</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，则</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">B</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">与</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">也是父子关系，</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">A</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">与</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">构成爷孙关系，也就是说</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">C</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">A</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">的孙子进程。在系统上使用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">pstree</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">命令打印进程树，可以清晰看到备份关系。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">多线程间的关系没有那么严格，不管是父线程还是子线程创建了新的线程，都是共享父线程的资源，所以，都可以说是父线程的子线程，也就是只存在一个父线程，其余线程都是父线程的子线程。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&nbsp;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">8).</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">进程池与线程池的技术实现差别</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">我们都知道，进程和线程的创建时需要时间的，并且系统所能承受的进程和线程数也是有上限的，这样一来，如果业务在运行中需要动态创建子进程或线程时，系统无法承受不能立即创建的话，必然影响业务。综上，聪明的程序员发明了一种新方法——池。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">在程序启动时，就预先创建一些子进程或线程，这样在需要用时直接使唤。这就是老人口中的“</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">多生孩子多种树</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">”。程序才开始运行，没有那么多的服务请求，必然大量的进程或线程空闲，这时候一般让他们“冬眠”，这样不耗资源，要不然一大堆孩子的口食也是个负担啊。对于进程和线程而言，方式是不一样的。另外，当你有了任务，要分配给那些孩子的时候，手段也不一样。下面就分别来解说。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">进程池</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">首先创建了一批进程，就得管理，也就是你得分开保存进程</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">ID</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，可以用数组，也可用链表。建议用数组，这样可以实现常数内找到某个线程，而且既然做了进程池，就预先估计好了生产多少进程合适，一般也不会再动态延展。就算要动态延展，也能预估范围，提前做一个足够大的数组。不为别的，就是为了快速响应。本来错进程池的目的也是为了效率。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">接下来就要让闲置进程冬眠了，可以让他们</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">pause()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">挂起，也可用信号量挂起，还可以用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">IPC</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">阻塞</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">，方法很多，分析各自优缺点根据实际情况采用就是了。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">然后是分配任务了，当你有任务的时候就要让他干活了。唤醒了进程，让它从哪儿开始干呢？肯定得用到进程间通信了，比如信号唤醒它，然后让它在预先指定的地方去读取任务，可以用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">函数指针</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">来实现，要让它干什么，就在约定的地方设置代码段指针。这也只是</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">告诉了它怎么干，还没说干什么</span></span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">(</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll fuchsia;">数据条件</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">)</span><span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">，再</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">通过共享内存把要处理的数据设置好</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">，这也子进程就知道怎么做了。干完之后再来一次进程间通信然后自己继续冬眠，父进程就知道孩子干完了，收割成果。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">最后结束时回收子进程，向各进程发送信号唤醒，改变激活状态让其主动结束，然后逐个</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">wait()</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">就可以了。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px; background: none 0% 0% repeat scroll yellow;">线程池</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程池的思想与上述类似，只是它更为轻量级，所以调度起来不用等待额外的资源。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: 宋体;"><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">要让线程阻塞，用</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun; background: none 0% 0% repeat scroll fuchsia;">条件变量</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">就是了，需要干活的时候父线程改变条件，子线程就被激活。</span></span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程间通信方式就不用赘述了，不用繁琐的通信就能达成，比起进程间效率要高一些。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">线程干完之后自己再改变条件，这样父线程也就知道该收割成果了。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">整个程序结束时，逐个改变条件并改变激活状态让子线程结束，最后逐个回收即可。</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; font-size: 16px; word-wrap: break-word; word-break: break-all; font-family: &#39;Lantinghei SC&#39;,&#39;Open Sans&#39;,Arial,&#39;Hiragino Sans GB&#39;,&#39;Microsoft YaHei&#39;,STHeiti,&#39;WenQuanYi Micro Hei&#39;,SimSun,sans-serif; text-indent: 21pt;">
+<span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&lt;&lt;&lt;</span><span style="padding: 0px; margin: 0px; font-family: SimSun; font-size: 18px;">本文完结</span><span style="padding: 0px; margin: 0px; font-size: 18px; font-family: SimSun;">&gt;&gt;&gt;</span></p>
+<p style="padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 20px; line-height: 28.8px; letter-spacing: 0.5px; word-wrap: break-word; word-break: break-all; text-indent: 21pt;">
+<span style="font-family: SimSun;"><span style="font-size: 18px;">本文转自：http://my.oschina.net/cnyinlinux/blog/422207</span></span></p>
+
+                    </div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/fah936861121/category/1131899.html" target="_blank">Linux 进程和线程</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(8043187,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;a5f239e2-f695-e611-845c-ac853d9f53ac&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fah936861121/" target="_blank"><img src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/fah936861121/">大海中的一粒沙</a><br>
+            <a href="http://home.cnblogs.com/u/fah936861121/followees">关注 - 1</a><br>
+            <a href="http://home.cnblogs.com/u/fah936861121/followers">粉丝 - 12</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;a5f239e2-f695-e611-845c-ac853d9f53ac&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(8043187,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(8043187,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/fah936861121/articles/8037485.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/fah936861121/articles/8037485.html" title="发布于2017-12-14 14:21">回调函数是什么?</a><br><a href="https://www.cnblogs.com/fah936861121/articles/8056318.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/fah936861121/articles/8056318.html" title="发布于2017-12-18 10:17">转载_高精度定时器（HRTIMER）的原理和实现</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-12-15 15:13</span> <a href="https://www.cnblogs.com/fah936861121/">大海中的一粒沙</a> 阅读(<span id="post_view_count">8827</span>) 评论(<span id="post_comment_count">0</span>) &nbsp;<a href="https://i.cnblogs.com/EditArticles.aspx?postid=8043187" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/fah936861121/articles/8043187.html#" onclick="AddToWz(8043187);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=312958,cb_entryId=8043187,cb_blogApp=currentBlogApp,cb_blogUserGuid='a5f239e2-f695-e611-845c-ac853d9f53ac',cb_entryCreatedDate='2017/12/15 15:13:00';loadViewCount(cb_entryId);var cb_postType=2;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/fah936861121/articles/8043187.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/fah936861121/articles/8043187.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真组态图形源码</a><br><a href="https://ke.qq.com/adActivity.html?name=xiangxueketang2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-享学&#39;)">【培训】IT职业生涯指南，Java程序员薪资翻3倍的秘密</a><br><a href="https://group.cnblogs.com/topic/81213.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-咕泡&#39;)">【培训】工作996，生病ICU，程序员不加班就没前途吗？</a><br><a href="https://gitee.com/enterprises?from=bky-2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-gitee&#39;)">【推荐】专业便捷的企业级代码托管服务 - Gitee 码云</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/gpt.js"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CNSdwffW5-ECFUcrlgodygQBDA"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/youngforever/p/3250270.html" target="_blank" onclick="clickRecomItmem(3250270)">进程的同步与通信，进程与线程同步的区别，进程与线程通信的区别</a><br>·  <a href="https://www.cnblogs.com/chg2001868/archive/2009/11/06/1597216.html" target="_blank" onclick="clickRecomItmem(1597216)">进程与线程的区别</a><br>·  <a href="https://www.cnblogs.com/zmrlinux/p/4921419.html" target="_blank" onclick="clickRecomItmem(4921419)">linux进程与线程的区别</a><br>·  <a href="https://www.cnblogs.com/viviancc/archive/2012/02/08/2342790.html" target="_blank" onclick="clickRecomItmem(2342790)">进程与线程的区别</a><br>·  <a href="https://www.cnblogs.com/bailuobo/archive/2013/05/20/3088527.html" target="_blank" onclick="clickRecomItmem(3088527)">线程与进程区别</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CNWdwffW5-ECFUcrlgodygQBDA"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/624273/" target="_blank">苹果雇了一位哲学家，工作内容高度保密</a><br> ·  <a href="https://news.cnblogs.com/n/624272/" target="_blank">英特尔发9代酷睿标压笔记本处理器：8核5GHz达成</a><br> ·  <a href="https://news.cnblogs.com/n/624271/" target="_blank">TESS望远镜发现首颗地球大小系外行星 或有大气层</a><br> ·  <a href="https://news.cnblogs.com/n/624270/" target="_blank">英国同意华为参与5G建设：提供天线等非核心设备</a><br> ·  <a href="https://news.cnblogs.com/n/624269/" target="_blank">Windows 7 用户已开始收到停止支持的提醒</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/fah936861121/">大海中的一粒沙</a><br>园龄：<a href="https://home.cnblogs.com/u/fah936861121/" title="入园时间：2016-10-19">2年6个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/fah936861121/followers/">12</a><br>关注：<a href="https://home.cnblogs.com/u/fah936861121/followees/">1</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;a5f239e2-f695-e611-845c-ac853d9f53ac&#39;)">+加关注</a></div><script>getFollowStatus('a5f239e2-f695-e611-845c-ac853d9f53ac')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/03/01&#39;);return false;">&lt;</a></td><td align="center">2019年4月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/05/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td class="CalWeekendDay" align="center">6</td></tr><tr><td class="CalWeekendDay" align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td class="CalWeekendDay" align="center">13</td></tr><tr><td class="CalWeekendDay" align="center">14</td><td align="center">15</td><td align="center">16</td><td align="center">17</td><td align="center">18</td><td align="center">19</td><td class="CalWeekendDay" align="center">20</td></tr><tr><td class="CalWeekendDay" align="center">21</td><td align="center">22</td><td align="center">23</td><td class="CalTodayDay" align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalWeekendDay" align="center">27</td></tr><tr><td class="CalWeekendDay" align="center">28</td><td align="center">29</td><td align="center">30</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td></tr><tr><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td><td class="CalOtherMonthDay" align="center">11</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/fah936861121/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/fah936861121/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/fah936861121/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/fah936861121/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/fah936861121/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/fah936861121/tag/udev/">udev</a>(6)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/linux-kernel/">linux-kernel</a>(5)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/LCD/">LCD</a>(4)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/Linux%20%E5%88%9D%E5%A7%8B%E5%8C%96%20init%20%E7%B3%BB%E7%BB%9F/">Linux 初始化 init 系统</a>(3)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/busybox/">busybox</a>(2)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/c/">c</a>(2)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/git/">git</a>(1)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/imx6%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/">imx6启动流程分析</a>(1)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/iomux/">iomux</a>(1)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/Kconfig/">Kconfig</a>(1)</li><li><a href="https://www.cnblogs.com/fah936861121/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/fah936861121/category/985418.html">《Linux操作系统原理与应用》</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/fah936861121/category/1056071.html">imx6(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/fah936861121/category/1045338.html">uboot中断</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListPostArchive">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/fah936861121/archive/2019/03.html">2019年3月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/fah936861121/archive/2019/01.html">2019年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/fah936861121/archive/2018/10.html">2018年10月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/fah936861121/archive/2017/11.html">2017年11月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/fah936861121/archive/2017/09.html">2017年9月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/fah936861121/archive/2017/08.html">2017年8月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/fah936861121/archive/2017/07.html">2017年7月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/fah936861121/archive/2017/06.html">2017年6月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/fah936861121/archive/2017/05.html">2017年5月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/fah936861121/archive/2017/04.html">2017年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/fah936861121/archive/2017/03.html">2017年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/fah936861121/archive/2017/02.html">2017年2月 (7)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListArticleCategory">
+<h3 class="catListTitle">文章分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="https://www.cnblogs.com/fah936861121/category/991824.html">automake(4)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_1" href="https://www.cnblogs.com/fah936861121/category/1003156.html">c(22)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_2" href="https://www.cnblogs.com/fah936861121/category/1300229.html">CAN(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_3" href="https://www.cnblogs.com/fah936861121/category/1218753.html">CAN诊断(3)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_4" href="https://www.cnblogs.com/fah936861121/category/976598.html">fcntl用法详解(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_5" href="https://www.cnblogs.com/fah936861121/category/1012949.html">git(5)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_6" href="https://www.cnblogs.com/fah936861121/category/976584.html">I/O多路复用之select、poll、epoll(3)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_7" href="https://www.cnblogs.com/fah936861121/category/977050.html">I/O-同步、异步、阻塞、非阻塞(4)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_8" href="https://www.cnblogs.com/fah936861121/category/1025183.html">imx6设备树pinctrl解析(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_9" href="https://www.cnblogs.com/fah936861121/category/1269731.html">ISO14229(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_10" href="https://www.cnblogs.com/fah936861121/category/1001772.html">LCD(20)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_11" href="https://www.cnblogs.com/fah936861121/category/1137291.html">linux SPI驱动(5)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_12" href="https://www.cnblogs.com/fah936861121/category/1131899.html">Linux 进程和线程(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_13" href="https://www.cnblogs.com/fah936861121/category/976000.html">linux串口通信(4)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_14" href="https://www.cnblogs.com/fah936861121/category/1070280.html">linux启动logo显示(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_15" href="https://www.cnblogs.com/fah936861121/category/1007862.html">Linux设备树(8)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_16" href="https://www.cnblogs.com/fah936861121/category/1008075.html">Linux时钟子系统(7)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_17" href="https://www.cnblogs.com/fah936861121/category/1024930.html">linux通信类协议(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_18" href="https://www.cnblogs.com/fah936861121/category/1024242.html">linux统一设备模型(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_19" href="https://www.cnblogs.com/fah936861121/category/1003389.html">linux系统(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_20" href="https://www.cnblogs.com/fah936861121/category/1132942.html">Linux下的hrtimer高精度定时器(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_21" href="https://www.cnblogs.com/fah936861121/category/1269715.html">MCU(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_22" href="https://www.cnblogs.com/fah936861121/category/1161694.html">MIPI接口(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_23" href="https://www.cnblogs.com/fah936861121/category/1160623.html">nandflash驱动(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_24" href="https://www.cnblogs.com/fah936861121/category/1011929.html">uboot启动流程分析(5)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_25" href="https://www.cnblogs.com/fah936861121/category/1045340.html">uboot中断(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_26" href="https://www.cnblogs.com/fah936861121/category/1061455.html">ubuntu编译源码问题(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_27" href="https://www.cnblogs.com/fah936861121/category/1001741.html">USB(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_28" href="https://www.cnblogs.com/fah936861121/category/1076305.html">wifi(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_29" href="https://www.cnblogs.com/fah936861121/category/994998.html">yocto project(3)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_30" href="https://www.cnblogs.com/fah936861121/category/969420.html">回调函数(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_31" href="https://www.cnblogs.com/fah936861121/category/967174.html">蓝牙开发(4)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_32" href="https://www.cnblogs.com/fah936861121/category/1138343.html">内存(7)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_33" href="https://www.cnblogs.com/fah936861121/category/1119034.html">内核栈(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_34" href="https://www.cnblogs.com/fah936861121/category/954911.html">浅析Linux初始化 init 系统(3)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_35" href="https://www.cnblogs.com/fah936861121/category/1139400.html">嵌入式bin elf hex文件区别(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_36" href="https://www.cnblogs.com/fah936861121/category/1392632.html">嵌入式文件系统(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_37" href="https://www.cnblogs.com/fah936861121/category/1003974.html">嵌入式系统性能(1)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_38" href="https://www.cnblogs.com/fah936861121/category/1128785.html">网络(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_39" href="https://www.cnblogs.com/fah936861121/category/1391686.html">硬件知识(2)</a> </li>
+
+<li><a id="CatList_LinkList_2_Link_40" href="https://www.cnblogs.com/fah936861121/category/991890.html">中大型项目Makefile的编写(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">busybox制作根文件系统</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_3_Link_0" href="http://blog.csdn.net/mybelief321/article/details/10075709" rel="nofollow">一步一步制作文件系统(八)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_1" href="http://blog.csdn.net/mybelief321/article/details/10001927" rel="nofollow">一步一步制作文件系统(二)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_2" href="http://blog.csdn.net/mybelief321/article/details/10040939" rel="nofollow">一步一步制作文件系统(六)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_3" href="http://blog.csdn.net/mybelief321/article/details/10068293" rel="nofollow">一步一步制作文件系统(七)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_4" href="http://blog.csdn.net/mybelief321/article/details/10007075" rel="nofollow">一步一步制作文件系统(三)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_5" href="http://blog.csdn.net/mybelief321/article/details/10007719" rel="nofollow">一步一步制作文件系统(四)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_6" href="http://blog.csdn.net/mybelief321/article/details/10027917" rel="nofollow">一步一步制作文件系统(五)</a> </li>
+
+<li><a id="CatList_LinkList_3_Link_7" href="http://blog.csdn.net/asklw/article/details/52611594" rel="nofollow">一步一步制作文件系统(一)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">emmc</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_4_Link_0" href="http://blog.sina.com.cn/s/blog_71fdf1f00102v5c2.html" rel="nofollow">emmc分区详解</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">git</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_5_Link_0" href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137586810169600f39e17409a4358b1ac0d3621356287000" rel="nofollow">git教程</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux sfdisk命令详解</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_6_Link_0" href="http://blog.csdn.net/eibo51/article/details/50625967" rel="nofollow">linux sfdisk命令</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux shell脚本</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_7_Link_0" href="http://www.2cto.com/os/201309/246298.html" rel="nofollow">关于#!/bin/bash和#!/bin/sh</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux内核镜像文件</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_8_Link_0" href="http://blog.csdn.net/XscKernel/article/details/48054377#1kernel%E9%95%9C%E5%83%8F%E6%A0%BC%E5%BC%8Fvmlinux" rel="nofollow">linux的几个内核镜像格式</a> </li>
+
+<li><a id="CatList_LinkList_8_Link_1" href="https://www.cnblogs.com/lidabo/p/5719195.html" rel="nofollow">linux内核镜像的几种格式和uboot启动内核和文件系统时的环境变量设置</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux内核学习</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_9_Link_0" href="http://blog.chinaunix.net/uid-26495963-id-3145178.html" rel="nofollow">/etc/fstab文件详解</a> </li>
+
+<li><a id="CatList_LinkList_9_Link_1" href="http://blog.chinaunix.net/uid-20586655-id-1752570.html" rel="nofollow">linux内核学习方法论</a> </li>
+
+<li><a id="CatList_LinkList_9_Link_2" href="http://blog.chinaunix.net/uid-26514815-id-3453208.html" rel="nofollow">udev的使用方法</a> </li>
+
+<li><a id="CatList_LinkList_9_Link_3" href="http://blog.csdn.net/fengying765/article/details/6995313" rel="nofollow">udev工具的作用</a> </li>
+
+<li><a id="CatList_LinkList_9_Link_4" href="http://blog.chinaunix.net/uid-25120309-id-3787750.html" rel="nofollow">设备文件系统剖析与使用</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux下磁盘分区</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_10_Link_0" href="http://blog.csdn.net/aaronychen/article/details/2270048" rel="nofollow">linux下磁盘分区详解</a> </li>
+
+<li><a id="CatList_LinkList_10_Link_1" href="http://www.jb51.net/LINUXjishu/57192.html" rel="nofollow">linux下利用fdisk进行分区详解</a> </li>
+
+<li><a id="CatList_LinkList_10_Link_2" href="http://blog.chinaunix.net/uid-25829053-id-3067619.html" rel="nofollow">linux下添加新硬盘，分区及挂载</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux中gpio控制</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_11_Link_0" href="http://blog.csdn.net/u014213012/article/details/53140781" rel="nofollow"> Linux下用文件IO的方式操作GPIO </a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">linux中的tty</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_12_Link_0" href="http://blog.chinaunix.net/uid-7828352-id-3233064.html" rel="nofollow">Linux内核tty设备的理解</a> </li>
+
+<li><a id="CatList_LinkList_12_Link_1" href="http://blog.csdn.net/zhy10/article/details/1925063" rel="nofollow">linux中的控制台和终端</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">磁盘详解</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_13_Link_0" href="http://blog.csdn.net/misiter/article/details/7469710" rel="nofollow">磁头，柱面，扇区，磁盘</a> </li>
+
+<li><a id="CatList_LinkList_13_Link_1" href="http://blog.sina.com.cn/s/blog_5f1bfbd9010129eh.html" rel="nofollow">硬盘详解---磁道，扇区，柱面</a> </li>
+
+<li><a id="CatList_LinkList_13_Link_2" href="http://blog.chinaunix.net/uid-24774106-id-3340397.html" rel="nofollow">主引导扇区MBR详解</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">文件系统</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_14_Link_0" href="http://www.iteye.com/topic/816268" rel="nofollow">Linux文件系统简介</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/fah936861121/p/6938355.html#3706408">1. Re:start with git</a></li>
+        <li class="recent_comment_body">最近在学习git  看了有帮助哦</li>
+        <li class="recent_comment_author">--傻子太多骗子不够用了</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/fah936861121/p/6679915.html">1. c语言中external，static关键字用法(9423)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/7344085.html">2. 飞思卡尔烧写工具mfgtools的使用(5399)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/6496608.html">3. udev规则以及编写(5259)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/7229522.html">4. Kconfig详解(4207)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/6869129.html">5. 关于函数返回值为指针类型的分析(2931)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/fah936861121/p/6938355.html">1. start with git(1)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/fah936861121/p/6679915.html">1. c语言中external，static关键字用法(1)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/6496608.html">2. udev规则以及编写(1)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/7229522.html">3. Kconfig详解(1)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/7146336.html">4. linux嵌入式大神的博客文章---持续更新中(1)</a></li><li><a href="https://www.cnblogs.com/fah936861121/p/7121424.html">5. lcd中像素深度bpp和像素格式（比如RGB,YUV）的关系(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 大海中的一粒沙
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+
+</body><div><div class="gr_-editor gr-iframe-first-load" style="display: none;"><div class="gr_-editor_back"></div><iframe class="gr_-ifr gr-_dialog-content" src="./转载_Linux进程与线程的区别 - 大海中的一粒沙 - 博客园_files/saved_resource(2).html"></iframe></div></div><grammarly-card><div></div></grammarly-card><span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></html>
