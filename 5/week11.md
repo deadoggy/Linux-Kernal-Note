@@ -88,3 +88,5 @@ m <= n(程序文件共有n个段)： 因为有些逻辑段落有初值：代码�
 1. 数据页面在fork前，父进程访问过，则PTE[i]!=0，如果缺页， 看PTE[i].Base对应页框的count， 如果count > 1,就是需要copy-on-write, 分配新的页框，挂在自己的页表，复制原来页框到新页框，old page count --, new page RO->RW; 如果 count == 1, 则是另外一个进程 将PTE[i]的RO->RW.
 
 2. PTE[i]==0(exec 后 立即 fork)， 代码页面只需要一个进程从磁盘IO，另一个从radix中直接查询页框号； 数据页面：第一个进程就会从可执行文件读取数据，将页表挂在radix， 第二个进程也会重复这个过程，因为fork之前没有对数据进行操作，并且另一个进程可能会修改数据，所以不能同步。
+
+3. 首次读BSS逻辑页， Linux会返回ZERO_PAGE(全局变量), PTE[i].Base = ZERO_PAGE; 只有在写并且PTE[i].Base==ZERO_PAGE的时候，才会分配主存页框。
