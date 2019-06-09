@@ -3,13 +3,12 @@
 
 // linked queue implementation, suffering from ABA problem
 
-linked_queue init_linked_queue(){
-	linked_queue retq;
-	retq.head = (linked_queue_node*)malloc(sizeof(linked_queue_node));
-	retq.head->data = NULL;
-	retq.head->next = retq.head;
-	retq.tail = retq.head;
-	retq.size = 0;
+linked_queue* init_linked_queue(){
+	linked_queue* retq = (linked_queue*)malloc(sizeof(linked_queue));
+	retq->head = (linked_queue_node*)malloc(sizeof(linked_queue_node));
+	retq->head->data = NULL;
+	retq->head->next = NULL;
+	retq->tail = retq->head;
 	return retq;
 }
 
@@ -57,7 +56,7 @@ void linkedq_push(linked_queue* queue, void* data){
 		}
 	};
 
-	CAS(queue->tail, current_tail, current_tail->next); //D
+	CAS(&queue->tail, current_tail, current_tail->next); //D
 }
 
 /*
@@ -117,13 +116,13 @@ void* linkedq_pop(linked_queue* queue){
 
 // array lock free queue implementation
 
-array_queue init_array_queue(size_t capacity){
-	array_queue retq;
-	retq.capacity = capacity;
-	retq.read_idx = 0;
-	retq.write_idx = 0;
-	retq.max_read_idx = 0;
-	retq.q = (array_queue_node*)malloc((capacity) * sizeof(array_queue_node));
+array_queue* init_array_queue(size_t capacity){
+	array_queue* retq = (array_queue*)malloc(sizeof(array_queue));
+	retq->capacity = capacity;
+	retq->read_idx = 0;
+	retq->write_idx = 0;
+	retq->max_read_idx = 0;
+	retq->q = (array_queue_node*)malloc((capacity) * sizeof(array_queue_node));
 	return retq;
 }
 
@@ -151,22 +150,22 @@ int get_real_idx(array_queue q, size_t idx){
 * 写。
 */
 
-bool arrayq_push(array_queue queue, void* data){
+bool arrayq_push(array_queue* queue, void* data){
 	size_t current_read_idx, current_write_idx;
 	while(true){
-		current_read_idx = queue.read_idx;
-		current_write_idx = queue.write_idx;
+		current_read_idx = queue->read_idx;
+		current_write_idx = queue->write_idx;
 
-		if(get_real_idx(queue, current_write_idx+1)==get_real_idx(queue, current_read_idx)){
+		if(get_real_idx(*queue, current_write_idx+1)==get_real_idx(*queue, current_read_idx)){
 			return false; //full
 		}
 		
-		if(!CAS(&queue.write_idx, current_write_idx, current_write_idx+1)){ // A
+		if(!CAS(&queue->write_idx, current_write_idx, current_write_idx+1)){ // A
 			continue;
 		}
-		queue.q[current_write_idx].data = data; // B
+		queue->q[current_write_idx].data = data; // B
 
-		while(!CAS(&queue.max_read_idx, current_write_idx, current_write_idx+1));// C
+		while(!CAS(&queue->max_read_idx, current_write_idx, current_write_idx+1));// C
 
 		return true;
 	}
@@ -192,19 +191,19 @@ bool arrayq_push(array_queue queue, void* data){
 * 的位置并修改了current_read_idx的值之后，该线程又夺回了CPU，此时返回的值就和被抢占前
 * 的不一样了。
 */
-void* arrayq_pop(array_queue queue){
+void* arrayq_pop(array_queue* queue){
 	int current_read_idx;
 	void* ret_data;
 	while(true){
-		current_read_idx = queue.read_idx;
+		current_read_idx = queue->read_idx;
 
-		if(get_real_idx(queue, current_read_idx)==get_real_idx(queue, queue.max_read_idx)){
+		if(get_real_idx(*queue, current_read_idx)==get_real_idx(*queue, queue->max_read_idx)){
 			return NULL;
 		}
 		
-		ret_data = queue.q[current_read_idx].data; // A
+		ret_data = queue->q[current_read_idx].data; // A
 
-		if(CAS(&queue.read_idx, current_read_idx, current_read_idx+1)){ //B
+		if(CAS(&queue->read_idx, current_read_idx, current_read_idx+1)){ //B
 			return ret_data;
 		}
 	}

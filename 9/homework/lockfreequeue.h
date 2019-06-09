@@ -17,10 +17,9 @@ typedef struct _linked_queue_node {
 typedef struct _linked_queue {
     linked_queue_node* head;
     linked_queue_node* tail;
-    size_t size;
 } linked_queue;
 
-linked_queue init_linked_queue();
+linked_queue* init_linked_queue();
 void linkedq_push(linked_queue* queue, void* data);
 void* linkedq_pop(linked_queue* queue);
 
@@ -37,8 +36,8 @@ typedef struct _array_queue {
     array_queue_node* q;
 } array_queue;
 
-array_queue init_array_queue(size_t capacity);
-bool arrayq_push(array_queue queue, void* data);
-void* arrayq_pop(array_queue queue);
+array_queue* init_array_queue(size_t capacity);
+bool arrayq_push(array_queue* queue, void* data);
+void* arrayq_pop(array_queue* queue);
 
 # endif

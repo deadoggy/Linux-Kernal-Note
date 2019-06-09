@@ -12,8 +12,13 @@
             "program": "${workspaceFolder}/target/${fileBasenameNoExtension}",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
+            "cwd": "${workspaceFolder}/target/",
+            "environment": [
+                {
+                    "name": "OMP_NESTED",
+                    "value": "TRUE"
+                }
+            ],
             "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [

@@ -6,5 +6,9 @@
     "C_Cpp.default.defines": [
         "_GNU_SOURCE",
         "_POSIX_C_SOURCE=200112L"
+    ],
+    "C_Cpp.default.includePath": [ 
+        "/home/yinjia/anaconda2/include/glib-2.0/",
+        "/home/yinjia/anaconda2/lib/glib-2.0/include/"
     ]
 }
