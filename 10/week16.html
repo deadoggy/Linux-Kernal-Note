@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>Linux 文件系统</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+        <h1 id="linux-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F">Linux 文件系统</h1>
+<ol>
+<li>
+<p>VFS</p>
+<ol>
+<li>每一个文件都有一个unique的文件名，按名存取</li>
+<li>每一个文件有一个inode: 文件的静态属性</li>
+<li>每一个文件存储了数据： 从核心态缓存读取数据， 缓存块是用来存放文件数据的Page(主存页框)</li>
+<li>访问文件需要的函数: 与文件所在文件系统相关</li>
+</ol>
+</li>
+<li>
+<p>具体文件系统</p>
+<ol>
+<li>磁盘上文件系统
+<ol>
+<li>磁盘上的文件系统，永久存储的文件
+<ol>
+<li>FAT, NTFS:微软系列</li>
+<li>UNIX/LINUX风格</li>
+</ol>
+</li>
+<li>TTY, 终端系统输入输出</li>
+<li>Socket</li>
+<li>除tty的所有外设</li>
+<li>proc/systs: 数据取自内核变量，为应用程序提供方便访问内核变量手段</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>VFS 目录搜索</p>
+<ol>
+<li>Linux 目录文件: Item: &lt;文件名，inodeID&gt;</li>
+<li>从树根开始
+<ol>
+<li>读取父目录文件</li>
+<li>遍历父目录文件，匹配文件名字符串</li>
+<li>1+2开销大，加速:
+<ol>
+<li>windows: 每个目录配一个B+树，目录文件中的每一个目录项在B+树管理下就是有序的</li>
+<li>unix/linux: 近期使用过的所有目录项缓存(dentry)
+<ol>
+<li>dentry中文件名不是绝对路径，是绝对路径中一个分量，例如&quot;home&quot;</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<pre><code><div>    dentry{
+        string 文件名;
+        int dev;
+        int inode;
+        ListHead childDentry;
+        ListHead sibling;
+    }
+</div></code></pre>
+<ol start="4">
+<li>具体文件系统&lt;EXT2为例&gt;
+<ol>
+<li>SuperBlock: 登记了文件卷的布局</li>
+<li>inode集合:</li>
+<li>数据区</li>
+<li>[ SuperBlock | inode集合 | 数据区 ] 组成一个文件卷； 每一个文件卷有一个 type + magic number(登记在SB中，是一个int，取决于文件系统)</li>
+<li>具体访问方法:
+<ol>
+<li>有读superblock的方法</li>
+<li>读inode的方法</li>
+<li>知道根目录的位置</li>
+<li>read/write/create 方法</li>
+<li>磁盘空闲空间管理 **
+<ol>
+<li>Windows风格磁盘: FAT表</li>
+<li>Unix: 空闲inode(IB)+空闲数据块(DB)</li>
+</ol>
+</li>
+<li>解析目录文件的方法</li>
+<li>传统内核: 文件系统要注册，使系统知道访问文件系统的函数，并对应一个magic number</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>文件系统的元数据是硬盘上的数据结构: SuperBlock + inode + 目录项 + bitmaps
+<ol>
+<li>根目录是#2号文件， #0是指该目录项是空的， #1文件登记磁盘上坏的扇区，是Unix文件系统的隐藏文件，在数据区最开始的某个数据区</li>
+</ol>
+</li>
+<li>目录文件: 第一个目录项: &lt;myself|.&gt;; 第二个目录项: &lt;father|..&gt;; 其他...； 第一个和第二个存在的意义是可以支持相对路径.</li>
+<li>VFS:
+<ol>
+<li>task_struct:
+<ol>
+<li>fs-&gt; &lt;根目录 + 当前空做目录&gt;</li>
+<li>files-&gt; &lt;#0 file&gt; -&gt; &lt;#1 file&gt; -&gt; ... &lt;#x FILE&gt; (FILE链表)</li>
+<li>数据装在n个不相邻的主存页框， 若不命中，VFS会调用具体的文件系统中的read，从磁盘读取4k字节填充到主存页框中</li>
+<li>inode中有一根指针指向磁盘上的inode， 还有一根ops指针登记了文件访问方法, 与具体的文件系统相关</li>
+<li>FILE结构登记了进程打开的文件的动态信息， 有一个指针指向了磁盘的inode</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>注册：
+<ol>
+<li>所有文件系统登记在一根链表上，每个node(struct fs_types)中有个指针记录了这个文件系统的所有函数</li>
+</ol>
+</li>
+<li>mount:
+<ol>
+<li>识别magic number</li>
+<li>读取磁盘superblock</li>
+<li>读取磁盘根目录节点(dentry, 整个文件系统的第一个dentry)，并为其构造内存inode，inode中的ops指针指向fs_types结构中的ops</li>
+</ol>
+</li>
+<li>打开一个文件之后会分配一个Radix Tree.</li>
+<li>读取元数据：
+<ol>
+<li>硬盘也是一个文件， /dev/sda, 用offset定位磁盘上的每个数据块。</li>
+<li><img src="file:////home/yinjia/Linux/Linux-Kernal-Note/10/pic.jpg" alt=""></li>
+<li>|SB|inodes|data|: 访问data中的数据可以通过 inode.addr + offset 访问， 但是要读取 SB或者inode的数据，是没有办法通过这种方法，因此将磁盘看作是一个文件，在/dev/sda中作为特殊类型文件，可以通过offset直接读取SB+inode的数据</li>
+</ol>
+</li>
+</ol>
+
+    </body>
+    </html>
