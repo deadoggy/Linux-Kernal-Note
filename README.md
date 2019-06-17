@@ -4,4 +4,4 @@
 
 ## 在线linux内核源码网址
 
-[https://elixir.bootlin.com/linux/latest/ident/sock](https://elixir.bootlin.com/linux/latest/ident/sock)
+[https://elixir.bootlin.com/linux/latest/source](https://elixir.bootlin.com/linux/latest/source)
